@@ -1,0 +1,71 @@
+# Node.js dependencies
+node_modules/
+build/
+dist/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+.vscode/
+
+# Production environment variables
+.env
+.env.local
+.env.*.local
+
+# Compiled TypeScript files
+*.tsbuildinfo
+
+# React Native specific
+.expo/
+.expo-shared/
+
+# Ignore yarn.lock, if you're using npm
+yarn.lock
+
+# ASP.NET specific files
+
+# Visual Studio
+.vs/
+.vscode/
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+
+# ASP.NET build output
+bin/
+obj/
+out/
+
+# Entity Framework Migrations
+Migrations/
+
+# SQL Server local database files
+*.mdf
+*.ldf
+
+# ASP.NET user-secrets folder
+secrets.json
+
+# Publish output
+wwwroot/
+
+# Rider IDE files
+.idea/
+*.sln.iml
+
+# ASP.NET environment files
+appsettings*.json
+
+# Resharper files
+_ReSharper*/
+
+# SQLLite DB
+*.db*

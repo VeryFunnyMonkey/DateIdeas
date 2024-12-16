@@ -1,0 +1,6 @@
+@DateIdeas.Backend_HostAddress = http://localhost:5233
+
+GET {{DateIdeas.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

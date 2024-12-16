@@ -1,0 +1,29 @@
+services:
+  frontend:
+    container_name: dateIdeas.Frontend
+    build: ./DateIdeas.Frontend
+    ports:
+      - "3000:3000"  # Expose Nginx on port 80
+    environment:
+      - BACKEND_URL=http://backend:5000  # Use the service name 'backend' in the URL
+    networks:
+      - app-network
+
+  backend:
+    container_name: dateIdeas.Backend
+    build: ./DateIdeas.Backend
+    ports:
+      - "5500:5000"  # Ensure the backend is accessible on port 5000
+    environment:
+      - FRONTEND_URL=http://backend:3000  # Use the service name 'backend' in the URL
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} # Get the Google Maps API key from the environment
+    networks:
+      - app-network
+    volumes:
+      # - /Users/joseph/Documents/dateIdeas.Backend:/data # Mac
+      # - C:\Users\Joseph\Documents\dateIdeas.Backend:/data # Windows
+      - /home/debian/docker/config/dateideas.backend:/data # Linux
+
+networks:
+  app-network:
+    driver: bridge
