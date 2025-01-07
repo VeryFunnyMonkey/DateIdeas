@@ -34,7 +34,8 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
       axios.get(`/api/maps/places/autocomplete`, {
         params: {
           query: value, // The user input for the location
-        }
+        },
+        withCredentials: true // Include cookies in the request
       })
       .then((response) => {
         setAutocompleteResults(response.data.predictions); // Store the autocomplete predictions

@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DateIdeasBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TagsController : ControllerBase
     {
         private readonly DateIdeasContext _context;

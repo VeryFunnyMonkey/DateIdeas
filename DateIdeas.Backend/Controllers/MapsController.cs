@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DateIdeasBackend.Controllers
 {
     [Route("api/maps")]
     [ApiController]
+    [Authorize]
     public class MapsController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;

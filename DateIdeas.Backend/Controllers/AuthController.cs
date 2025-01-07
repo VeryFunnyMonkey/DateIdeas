@@ -7,6 +7,7 @@ namespace DateIdeas.Backend.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -18,7 +19,6 @@ namespace DateIdeas.Backend.Controllers
 
         // POST: /logout
         [HttpPost("logout")]
-        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
