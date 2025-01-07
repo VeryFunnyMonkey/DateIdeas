@@ -30,7 +30,7 @@ export default function RandomPage({ ideas }) {
   return (
     <div className="flex flex-col justify-center h-svh bg-slate-50">
       {(ideas.length === 0) ? <NoDateIdeas /> :
-      isBroken ? (
+      !isBroken ? (
         <div className="flex items-center justify-center">
           <GiftIcon
             className={`h-32 w-32 text-pink-500 cursor-pointer ${isSwaying ? 'sway' : ''}`}
