@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace DateIdeasBackend.Controllers
 {
@@ -29,7 +30,8 @@ namespace DateIdeasBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDto>>> GetTags()
         {
-            var tags = await _context.Tags.ToListAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var tags = await _context.Tags.Where(t => t.UserId == userId).ToListAsync();
             var tagDtos = _mapper.Map<IEnumerable<TagDto>>(tags);
             return Ok(tagDtos);
 
@@ -39,7 +41,8 @@ namespace DateIdeasBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TagDto>> GetTag(int id)
         {
-            var tag = await _context.Tags.Include(t => t.DateIdeas).FirstOrDefaultAsync(t => t.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var tag = await _context.Tags.Include(t => t.DateIdeas).Where(t => t.UserId == userId).FirstOrDefaultAsync(t => t.Id == id);
 
             if (tag == null)
             {
@@ -53,14 +56,16 @@ namespace DateIdeasBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<CreateTagDto>> PostTag(CreateTagDto createTagDto)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var tag = _mapper.Map<Tag>(createTagDto);
+            tag.UserId = userId;
 
             _context.Tags.Add(tag);
             await _context.SaveChangesAsync();
 
             var tagDto = _mapper.Map<TagDto>(tag);
 
-            await _hubContext.Clients.All.SendAsync("ReceiveTag", tagDto);
+            await _hubContext.Clients.Group(userId).SendAsync("ReceiveTag", tagDto);
 
             return CreatedAtAction(nameof(GetTag), new { id = tag.Id }, tagDto);
         }
@@ -69,7 +74,8 @@ namespace DateIdeasBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTag(int id, UpdateTagDto updateTagDto)
         {
-            var tag = await _context.Tags.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var tag = await _context.Tags.Where(t => t.UserId == userId).FirstOrDefaultAsync(t => t.Id == id);
             if (tag == null)
             {
                 return NotFound();
@@ -83,7 +89,7 @@ namespace DateIdeasBackend.Controllers
             {
                 await _context.SaveChangesAsync();
 
-                await _hubContext.Clients.All.SendAsync("UpdateTag", _mapper.Map<TagDto>(tag));
+                await _hubContext.Clients.Group(userId).SendAsync("UpdateTag", _mapper.Map<TagDto>(tag));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -104,7 +110,8 @@ namespace DateIdeasBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
         {
-            var tag = await _context.Tags.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var tag = await _context.Tags.Where(t => t.UserId == userId).FirstOrDefaultAsync(t => t.Id == id);
             if (tag == null)
             {
                 return NotFound();
@@ -113,7 +120,7 @@ namespace DateIdeasBackend.Controllers
             _context.Tags.Remove(tag);
             await _context.SaveChangesAsync();
 
-            await _hubContext.Clients.All.SendAsync("DeleteTag", id);
+            await _hubContext.Clients.Group(userId).SendAsync("DeleteTag", id);
 
             return NoContent();
         }

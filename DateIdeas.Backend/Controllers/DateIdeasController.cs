@@ -126,7 +126,7 @@ namespace DateIdeasBackend.Controllers
         public async Task<IActionResult> DeleteDateIdea(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var dateIdea = await _context.DateIdeas.Where(d => d.UserId == userId && d.Id == id).FirstOrDefaultAsync();
+            var dateIdea = await _context.DateIdeas.Where(d => d.UserId == userId).FirstOrDefaultAsync(d => d.Id == id);
             if (dateIdea == null)
             {
                 return NotFound();
