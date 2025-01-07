@@ -10,6 +10,6 @@ namespace DateIdeasBackend.Models
 
         public List<DateIdea> DateIdeas { get; set;} = [];
         [Required]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
     }
 }
