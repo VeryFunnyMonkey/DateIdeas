@@ -1,0 +1,1 @@
+ssh debian@dev-server 'cd /home/debian/dev/sync/DateIdeas && ./deployDateIdeas.sh'
