@@ -6,6 +6,8 @@ namespace DateIdeasBackend.Dtos
     {
         [Required]
         public required string Name { get; set; }
+        [Required]
+        public required string userId { get; set; }
     }
 
     public class TagDto
@@ -13,12 +15,16 @@ namespace DateIdeasBackend.Dtos
         public int Id { get; set; }
         [Required]
         public required string Name { get; set; }
+        [Required]
+        public required string userId { get; set; }
     }
 
         public class UpdateTagDto
     {
         [Required]
         public required string Name { get; set; }
+        [Required]
+        public required string userId { get; set; }
     }
 
 }
