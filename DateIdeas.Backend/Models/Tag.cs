@@ -9,7 +9,6 @@ namespace DateIdeasBackend.Models
         public required string Name { get; set; }
 
         public List<DateIdea> DateIdeas { get; set;} = [];
-        [Required]
-        public required string userId { get; set; }
+        public string UserId { get; set; }
     }
 }

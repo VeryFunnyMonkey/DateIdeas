@@ -10,8 +10,6 @@ namespace DateIdeasBackend.Dtos
         public DateTime? Date { get; set; }
 
         public List<int>? TagIds { get; set;}
-        [Required]
-        public required string userId { get; set; }
     }
 
         public class DateIdeaDto
@@ -23,8 +21,6 @@ namespace DateIdeasBackend.Dtos
         public DateTime? Date { get; set; }
 
         public List<TagDto>? Tags { get; set;}
-        [Required]
-        public required string userId { get; set; }
     }
 
         public class UpdateDateIdeaDto
@@ -35,7 +31,5 @@ namespace DateIdeasBackend.Dtos
         public DateTime? Date { get; set; }
 
         public List<int>? TagIds { get; set;}
-        [Required]
-        public required string userId { get; set; }
     }
 }

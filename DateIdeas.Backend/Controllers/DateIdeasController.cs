@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace DateIdeasBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DateIdeasController : ControllerBase
     {
         private readonly DateIdeasContext _context;
@@ -28,7 +31,8 @@ namespace DateIdeasBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DateIdeaDto>>> GetDateIdeas()
         {
-            var dateIdeas = await _context.DateIdeas.Include(d => d.Tags).ToListAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dateIdeas = await _context.DateIdeas.Include(d => d.Tags).Where(d => d.UserId == userId).ToListAsync();
             var dateIdeaDtos = _mapper.Map<IEnumerable<DateIdeaDto>>(dateIdeas);
             return Ok(dateIdeaDtos);
         }
@@ -37,7 +41,8 @@ namespace DateIdeasBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DateIdeaDto>> GetDateIdea(int id)
         {
-            var dateIdea = await _context.DateIdeas.Include(d => d.Tags).FirstOrDefaultAsync(d => d.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dateIdea = await _context.DateIdeas.Include(d => d.Tags).Where(d => d.UserId == userId).FirstOrDefaultAsync(d => d.Id == id);
 
             if (dateIdea == null)
             {
@@ -51,7 +56,9 @@ namespace DateIdeasBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<CreateDateIdeaDto>> PostDateIdea(CreateDateIdeaDto createDateIdeaDto)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var dateIdea = _mapper.Map<DateIdea>(createDateIdeaDto);
+            dateIdea.UserId = userId;
 
             if (createDateIdeaDto.TagIds != null)
             {
@@ -66,7 +73,7 @@ namespace DateIdeasBackend.Controllers
 
             var dateIdeaDto = _mapper.Map<DateIdeaDto>(dateIdea);
 
-            await _hubContext.Clients.All.SendAsync("ReceiveDateIdea", dateIdeaDto);
+            await _hubContext.Clients.Group(userId).SendAsync("ReceiveDateIdea", dateIdeaDto);
 
             return CreatedAtAction(nameof(GetDateIdea), new { id = dateIdea.Id }, dateIdeaDto);
         }
@@ -76,7 +83,8 @@ namespace DateIdeasBackend.Controllers
         public async Task<IActionResult> PutDateIdea(int id, UpdateDateIdeaDto updateDateIdeaDto)
         {
             // Find the existing DateIdea
-            var dateIdea = await _context.DateIdeas.Include(d => d.Tags).FirstOrDefaultAsync(d => d.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var dateIdea = await _context.DateIdeas.Include(d => d.Tags).Where(d => d.UserId == userId).FirstOrDefaultAsync(d => d.Id == id);
 
             if (dateIdea == null)
             {
@@ -96,7 +104,7 @@ namespace DateIdeasBackend.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                await _hubContext.Clients.All.SendAsync("UpdateDateIdea", _mapper.Map<DateIdeaDto>(dateIdea));
+                await _hubContext.Clients.Group(userId).SendAsync("UpdateDateIdea", _mapper.Map<DateIdeaDto>(dateIdea));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -117,6 +125,7 @@ namespace DateIdeasBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDateIdea(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var dateIdea = await _context.DateIdeas.FindAsync(id);
             if (dateIdea == null)
             {
@@ -126,7 +135,7 @@ namespace DateIdeasBackend.Controllers
             _context.DateIdeas.Remove(dateIdea);
             await _context.SaveChangesAsync();
 
-            await _hubContext.Clients.All.SendAsync("DeleteDateIdea", id);
+            await _hubContext.Clients.Group(userId).SendAsync("DeleteDateIdea", id);
 
             return NoContent();
         }

@@ -16,6 +16,16 @@ namespace DateIdeasBackend.Data
             modelBuilder.Entity<DateIdea>()
                 .HasMany(d => d.Tags)
                 .WithMany(t => t.DateIdeas);
+            
+            modelBuilder.Entity<DateIdea>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(d => d.UserId);
+
+            modelBuilder.Entity<Tag>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(t => t.UserId);
 
             base.OnModelCreating(modelBuilder);
         }
