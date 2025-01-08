@@ -5,7 +5,8 @@ import { useAuthContext } from '../hooks/useAuthContext';
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { user, register,  login } = useAuthContext();
+  const [errorMessages, setErrorMessages] = useState(null);
+  const { user, register, login } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,13 +23,26 @@ export default function RegisterPage() {
       await login(email, password);
       navigate('/');
     } catch (error) {
-      alert('Registration failed.');
+      console.log(error);
+      const extractedErrors = Object.values(error.response.data.errors)
+        .flat()
+        .map((msg) => msg);
+      setErrorMessages(extractedErrors || 'Registration failed.');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        {errorMessages && (
+          <div className="mb-4 bg-red-600 text-white px-4 py-2 rounded shadow-lg">
+            <ul>
+              {errorMessages.map((errorMessage, index) => (
+                <li key={index}>{errorMessage}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">Register</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

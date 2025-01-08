@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
   const { user, login } = useAuthContext();
   const navigate = useNavigate();
 
@@ -20,13 +21,18 @@ export default function LoginPage() {
       await login(email, password);
       navigate('/');
     } catch (error) {
-      alert('Login failed.');
+      setErrorMessage('Login failed. Either the email or password is incorrect.');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        {errorMessage && (
+            <div className="mb-4 bg-red-600 text-white px-4 py-2 rounded shadow-lg">
+                {errorMessage}
+            </div>
+          )}
         <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
