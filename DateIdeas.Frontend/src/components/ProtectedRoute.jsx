@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthProvider';
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div></div>;
 
   return user ? children : <Navigate to="/login" />;
 };

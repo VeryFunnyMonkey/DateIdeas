@@ -14,9 +14,14 @@ const AuthProvider = ({ children }) => {
       .get(`${API_BASE_URL}/manage/info`, { withCredentials: true })
       .then((response) => {
         setUser(response.data);
-        console.log(response.data);
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          // 401 errors are expected when the user is not authenticated
+          console.warn('User not authenticated.');
+        } else {
+          console.error('Error fetching user info:', error);
+        }
         setUser(null);
       })
       .finally(() => {

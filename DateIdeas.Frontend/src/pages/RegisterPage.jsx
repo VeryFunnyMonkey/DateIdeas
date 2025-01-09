@@ -23,7 +23,6 @@ export default function RegisterPage() {
       await login(email, password);
       navigate('/');
     } catch (error) {
-      console.log(error);
       const extractedErrors = Object.values(error.response.data.errors)
         .flat()
         .map((msg) => msg);
