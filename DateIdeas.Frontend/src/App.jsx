@@ -11,6 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { useAuthContext } from './hooks/useAuthContext';
+import CalendarPage from './pages/CalendarPage';
 
 function App() {
   const [ideas, setIdeas] = useState([]);
@@ -105,6 +106,11 @@ function App() {
               <RandomPage ideas={ideas} /> 
             </ProtectedRoute>
             }/>
+          <Route path="/calendar" element={
+            <ProtectedRoute>
+              <CalendarPage ideas={ideas} />
+            </ProtectedRoute>
+            }/>            
           <Route path="/profile" element={
             <ProtectedRoute>
               <ProfilePage />
