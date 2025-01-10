@@ -8,7 +8,7 @@ export default function DateIdeaDetailsModal({ isOpen, onClose, idea }) {
       <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
         <h2 className="text-xl font-bold mb-4">{idea.title}</h2>
         <p className="text-gray-600 mb-2">Location: {idea.location || 'N/A'}</p>
-        <p className="text-gray-600 mb-2">Date: {new Date(idea.date).toLocaleString()}</p>
+        <p className="text-gray-600 mb-2">Date: {new Date(idea.scheduledDate).toLocaleString()}</p>
         <div className="flex flex-wrap gap-2 mb-4">
           {idea.tags.map((tag) => (
             <span

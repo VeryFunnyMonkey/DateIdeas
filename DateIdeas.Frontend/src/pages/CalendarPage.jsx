@@ -8,8 +8,8 @@ export default function CalendarPage({ ideas }) {
   const current = new Date();
 
   const upComingDateIdeas = ideas
-    .filter((idea) => new Date(idea.date) >= current)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+    .filter((idea) => new Date(idea.scheduledDate) >= current)
+    .sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate));
 
   return (
     <div className="p-4 max-w-screen-md mx-auto pb-20">
@@ -24,7 +24,7 @@ export default function CalendarPage({ ideas }) {
             >
               <div className="flex-1">
                 <div className="text-xl font-semibold text-blue-600">{idea.title}</div>
-                <div className="text-gray-600">{new Date(idea.date).toLocaleString()}</div>
+                <div className="text-gray-600">{new Date(idea.scheduledDate).toLocaleString()}</div>
               </div>
               <button
                 onClick={() => setSelectedIdea(idea)}

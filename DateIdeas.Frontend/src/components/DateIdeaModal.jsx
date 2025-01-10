@@ -5,7 +5,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
   const [formData, setFormData] = useState({
     title: '',
     location: '',
-    date: '',
+    scheduledDate: '',
     tags: []
   });
   const [newTag, setNewTag] = useState('');
@@ -16,7 +16,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
       setFormData(initialData || {
         title: '',
         location: '',
-        date: '',
+        scheduledDate: '',
         tags: [] // Clear tags for new entries
       });
       setNewTag('');
@@ -70,6 +70,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    formData.isCompleted = false; // Set default value for isCompleted
     onSubmit(formData);
     onClose(); // Close modal after submit
   };
@@ -128,9 +129,9 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
             <label htmlFor="date" className="block text-gray-700 mb-2">Date</label>
             <input
               type="datetime-local"
-              id="date"
-              name="date"
-              value={formData.date ?? ''}
+              id="scheduledDate"
+              name="scheduledDate"
+              value={formData.scheduledDate ?? ''}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
