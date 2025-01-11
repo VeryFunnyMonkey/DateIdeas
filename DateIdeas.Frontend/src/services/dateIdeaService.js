@@ -1,11 +1,23 @@
 import * as api from '../api/dateIdeaApiService';
 import { convertEmptyStringsToNull } from '../utils/stringUtils';
 
+export const getIdeas = async (ideas) => {
+  ideas = await api.getDateIdeas();
+  ideas.forEach((idea) => {
+    if (idea.scheduledDate) {
+    idea.scheduledDate = new Date(idea.scheduledDate+'Z'); // this is to convert the date from UTC to local time, need to add the Z otherwise it doesnt work..
+    console.log(idea);
+    }
+  });
+  return ideas;
+}
+
 export const addIdea = async (newIdea, setIdeas) => {
   const tagIds = newIdea.tags.map((tag) => tag.id);
   const newIdeaToSubmit = { ...newIdea, tagIds };
   delete newIdeaToSubmit.tags;
   convertEmptyStringsToNull(newIdeaToSubmit);
+  newIdeaToSubmit.scheduledDate = new Date(newIdeaToSubmit.scheduledDate).toISOString(); // this is to convert the date from local time to UTC
   const createdIdea = await api.createDateIdea(newIdeaToSubmit);
   console.log('Adding Idea' + createdIdea);
 };

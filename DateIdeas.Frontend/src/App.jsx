@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as api from './api/dateIdeaApiService';
+import { getIdeas } from './services/dateIdeaService';
 import BottomNavigationBar from './components/BottomNavigationBar';
 import HomeScreen from './pages/HomeScreen';
 import RandomPage from './pages/RandomPage';
@@ -22,7 +23,7 @@ function App() {
     if (user) {
       const fetchData = async () => {
         try {
-          const dateIdeasData = await api.getDateIdeas();
+          const dateIdeasData = await getIdeas();
           setIdeas(dateIdeasData);
           const tagsData = await api.getTags();
           setTags(tagsData);
