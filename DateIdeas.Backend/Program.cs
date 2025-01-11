@@ -1,5 +1,6 @@
 using DateIdeasBackend.Data;
 using DateIdeasBackend.Hubs;
+using DateIdeasBackend.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Logging.AddConsole();
+
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
@@ -29,6 +32,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSignalR();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<DateIdeasContext>();
+builder.Services.AddHostedService<DateIdeaExpirationHandlerService>();
 
 // Configure SQLite
 builder.Services.AddDbContext<DateIdeasContext>(options =>
