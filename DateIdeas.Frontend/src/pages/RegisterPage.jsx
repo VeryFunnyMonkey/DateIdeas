@@ -19,7 +19,6 @@ export default function RegisterPage() {
     e.preventDefault();
     try {
       await register(email, password);
-      alert('Registration successful!');
       await login(email, password);
       navigate('/');
     } catch (error) {

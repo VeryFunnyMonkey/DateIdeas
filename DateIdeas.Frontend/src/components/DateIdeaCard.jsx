@@ -41,7 +41,7 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
         {onSchedule && (
           <button
             onClick={() => onSchedule(idea)}
-            className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition duration-200 ease-in-out flex items-center justify-center"
+            className="p-2 rounded-lg bg-green-200 hover:bg-green-200 transition duration-200 ease-in-out flex items-center justify-center"
           >
             <ClockIcon className="h-5 w-5 text-green-600" />
           </button>

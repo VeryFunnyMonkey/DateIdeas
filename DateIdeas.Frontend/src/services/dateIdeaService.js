@@ -17,7 +17,8 @@ export const addIdea = async (newIdea, setIdeas) => {
   const newIdeaToSubmit = { ...newIdea, tagIds };
   delete newIdeaToSubmit.tags;
   convertEmptyStringsToNull(newIdeaToSubmit);
-  newIdeaToSubmit.scheduledDate = new Date(newIdeaToSubmit.scheduledDate).toISOString(); // this is to convert the date from local time to UTC
+  if(newIdeaToSubmit.scheduledDate)
+    newIdeaToSubmit.scheduledDate = new Date(newIdeaToSubmit.scheduledDate).toISOString(); // this is to convert the date from local time to UTC
   const createdIdea = await api.createDateIdea(newIdeaToSubmit);
   console.log('Adding Idea' + createdIdea);
 };
@@ -27,6 +28,8 @@ export const editIdea = async (updatedIdea, setIdeas) => {
   const updatedIdeaToSubmit = { ...updatedIdea, tagIds };
   delete updatedIdeaToSubmit.tags;
   convertEmptyStringsToNull(updatedIdeaToSubmit);
+  if(updatedIdea.scheduledDate)
+    updatedIdea.scheduledDate = new Date(updatedIdea.scheduledDate).toISOString(); // this is to convert the date from local time to UTC
   await api.updateDateIdea(updatedIdeaToSubmit.id, updatedIdeaToSubmit);
 };
 

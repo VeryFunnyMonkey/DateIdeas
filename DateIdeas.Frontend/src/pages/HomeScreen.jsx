@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TitleBar from '../components/TitleBar';
 import DateIdeaList from '../components/DateIdeaList';
 import DateIdeaModal from '../components/DateIdeaModal';
+import ScheduleDateIdeaModal from '../components/ScheduleDateIdeaModal';
 import { addIdea, editIdea, deleteIdea, addNewTag } from '../services/dateIdeaService';
 import { Bars3BottomLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -10,6 +11,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   const [selectedIdea, setSelectedIdea] = useState(null);
   const [selectedFilterTags, setSelectedFilterTags] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
 
   const filteredIdeas = selectedFilterTags.length
     ? ideas.filter((idea) =>
@@ -27,6 +29,16 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedIdea(null);
+  };
+
+  const handleOpenSchedule = (idea) => {
+    setSelectedIdea(idea);
+    setIsScheduleModalOpen(true);
+  };
+
+  const handleCloseSchedule = (idea) => {
+    setIsScheduleModalOpen(false);
+    setSelectedIdea(false);
   };
 
   const handleFilterTagSelect = (tag) => {
@@ -87,6 +99,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
       {/* Ideas List */}
       <DateIdeaList
         ideas={filteredIdeas}
+        onSchedule={(idea) => handleOpenSchedule(idea)}
         onEdit={(idea) => handleOpenModal(idea)}
         onDelete={deleteIdea}
       />
@@ -117,6 +130,12 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
         initialData={selectedIdea}
         globalTags={tags}
         addNewTag={(tag) => addNewTag(tag, tags, setTags)}
+      />
+      <ScheduleDateIdeaModal
+        idea={selectedIdea}
+        isOpen={isScheduleModalOpen}
+        onClose={handleCloseSchedule}
+        onSubmit={(idea) => editIdea(idea, setIdeas)}
       />
     </div>
   );

@@ -2,7 +2,6 @@ import { useState } from "react";
 import DateIdeaDetailsModal from "../components/DateIdeaDetailsModal";
 
 export default function CalendarPage({ ideas }) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedIdea, setSelectedIdea] = useState(null);
 
   const current = new Date();
@@ -13,7 +12,7 @@ export default function CalendarPage({ ideas }) {
 
   return (
     <div className="p-4 max-w-screen-md mx-auto pb-20">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Upcoming Date Ideas</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Upcoming Dates</h1>
 
       {upComingDateIdeas.length > 0 ? (
         <ul className="space-y-6">
@@ -36,7 +35,7 @@ export default function CalendarPage({ ideas }) {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-500">No upcoming date ideas.</p>
+        <p className="text-center text-gray-500">No upcoming dates.</p>
       )}
 
       <DateIdeaDetailsModal
