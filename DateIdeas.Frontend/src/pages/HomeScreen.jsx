@@ -12,6 +12,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   const [selectedFilterTags, setSelectedFilterTags] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState(['unscheduled', 'scheduled']);
 
   const filteredIdeas = selectedFilterTags.length
     ? ideas.filter((idea) =>
@@ -20,6 +21,10 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
         )
       )
     : ideas;
+
+  const unscheduledIdeas = filteredIdeas.filter((idea) => !idea.scheduledDate && !idea.isCompleted);
+  const scheduledIdeas = filteredIdeas.filter((idea) => idea.scheduledDate && !idea.isCompleted);
+  const completedIdeas = filteredIdeas.filter((idea) => idea.isCompleted);
 
   const handleOpenModal = (idea = null) => {
     setSelectedIdea(idea);
@@ -55,6 +60,20 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleCategorySelect = (category) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+  const displayedIdeas = [
+    ...selectedCategories.includes('unscheduled') ? unscheduledIdeas : [],
+    ...selectedCategories.includes('scheduled') ? scheduledIdeas : [],
+    ...selectedCategories.includes('completed') ? completedIdeas : [],
+  ];
+
   return (
     <div className="relative pb-16">
       {/* Title Bar */}
@@ -72,7 +91,34 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
         >
           <XMarkIcon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 lg:h-9 lg:w-9" />
         </button>
-        <h2 className="text-lg font-bold mb-4 text-blue-500 mt-6 p-4">Filter by Tags</h2>
+        <h2 className="text-lg font-bold text-blue-500 mt-7 mb-2">Filter by Category</h2>
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
+          <button
+            onClick={() => handleCategorySelect('unscheduled')}
+            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
+              selectedCategories.includes('unscheduled') ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            Unscheduled
+          </button>
+          <button
+            onClick={() => handleCategorySelect('scheduled')}
+            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
+              selectedCategories.includes('scheduled') ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            Scheduled
+          </button>
+          <button
+            onClick={() => handleCategorySelect('completed')}
+            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
+              selectedCategories.includes('completed') ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            Completed
+          </button>
+        </div>
+        <h2 className="text-lg font-bold text-blue-500 mt-7 mb-2">Filter by Tags</h2>
         <div className="flex gap-2 flex-wrap">
           {tags.map((tag) => (
             <span
@@ -98,7 +144,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
 
       {/* Ideas List */}
       <DateIdeaList
-        ideas={filteredIdeas}
+        ideas={displayedIdeas}
         onSchedule={(idea) => handleOpenSchedule(idea)}
         onEdit={(idea) => handleOpenModal(idea)}
         onDelete={deleteIdea}
