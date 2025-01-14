@@ -1,24 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function ScheduleDateIdeaModal({ idea, isOpen, onClose, onSubmit }) {
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [keep, setKeep] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      if (idea && idea.scheduledDate) {
+        console.log(idea.scheduledDate);
+        const localDate = new Date(idea.scheduledDate);
+        // Adjust for local timezone and format the date/time correctly
+        const offsetDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000)
+          .toISOString()
+          .slice(0, 16); // Date & Time formatted for input
+        setScheduledDate(offsetDate);
+      } else {
+        setScheduledDate('');
+      }
+
+      setKeep(idea?.keep || false);
+    }
+  }, [idea, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const scheduledDate = new Date(formData.get('scheduledDate'));
-    const keep = formData.get('keep') === 'on';
 
-    if (scheduledDate < new Date()) {
+    if (!scheduledDate) {
+      setError('Please select a date.');
+      return;
+    }
+
+    const selectedDate = new Date(scheduledDate);
+
+    if (selectedDate < new Date()) {
       setError('Selected date cannot be in the past.');
       return;
     }
 
-    idea.scheduledDate = scheduledDate;
-    idea.keep = keep;
+    const updatedIdea = { ...idea, 
+      scheduledDate: selectedDate, 
+      keep,
+      isCompleted: false};
 
-    console.log(idea)
-    onSubmit(idea);
+    onSubmit(updatedIdea);
     onClose();
   };
 
@@ -37,6 +62,8 @@ export default function ScheduleDateIdeaModal({ idea, isOpen, onClose, onSubmit 
               type="datetime-local"
               id="scheduledDate"
               name="scheduledDate"
+              value={scheduledDate}
+              onChange={(e) => setScheduledDate(e.target.value)}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
@@ -52,6 +79,8 @@ export default function ScheduleDateIdeaModal({ idea, isOpen, onClose, onSubmit 
                 type="checkbox"
                 id="keep"
                 name="keep"
+                checked={keep}
+                onChange={(e) => setKeep(e.target.checked)}
                 className="mr-2"
               />
               Keep after date is complete

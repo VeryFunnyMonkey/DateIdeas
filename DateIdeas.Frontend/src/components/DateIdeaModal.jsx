@@ -5,7 +5,6 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
   const [formData, setFormData] = useState({
     title: '',
     location: '',
-    scheduledDate: '',
     tags: []
   });
   const [newTag, setNewTag] = useState('');
@@ -16,7 +15,6 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
       setFormData(initialData || {
         title: '',
         location: '',
-        scheduledDate: '',
         tags: [] // Clear tags for new entries
       });
       setNewTag('');
@@ -123,20 +121,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
               </ul>
             )}
           </div>
-          
-          {/* Date */}
-          <div className="mb-4">
-            <label htmlFor="date" className="block text-gray-700 mb-2">Date</label>
-            <input
-              type="datetime-local"
-              id="scheduledDate"
-              name="scheduledDate"
-              value={formData.scheduledDate ?? ''}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-            />
-          </div>
-          
+                    
           {/* Tag Selection */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Tags</label>
