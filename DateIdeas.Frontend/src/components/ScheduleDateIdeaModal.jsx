@@ -11,6 +11,7 @@ export default function ScheduleDateIdeaModal({ idea, isOpen, onClose, onSubmit 
         console.log(idea.scheduledDate);
         const localDate = new Date(idea.scheduledDate);
         // Adjust for local timezone and format the date/time correctly
+        // TODO - see if theres a better way to do this? Maybe stop using datetime-local?
         const offsetDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000)
           .toISOString()
           .slice(0, 16); // Date & Time formatted for input
