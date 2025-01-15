@@ -10,7 +10,7 @@ import { Bars3BottomLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/so
 export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState(null);
-  const [selectedFilterTags, setSelectedFilterTags] = useState([]);
+  const [selectedFilterTags, setSelectedFilterTags] = usePersistedState('selectedFilterTags',[]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = usePersistedState('selectedCategories', ['unscheduled', 'scheduled']);
@@ -42,15 +42,17 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
     setIsScheduleModalOpen(true);
   };
 
-  const handleCloseSchedule = (idea) => {
+  const handleCloseSchedule = () => {
     setIsScheduleModalOpen(false);
     setSelectedIdea(false);
   };
 
+  //TODO: Rework this, not a huge fan of the way this is implemented
   const handleFilterTagSelect = (tag) => {
-    if (selectedFilterTags.includes(tag)) {
+    const tagExists = selectedFilterTags.some(selectedTag => selectedTag.name === tag.name);
+    if (tagExists) {
       setSelectedFilterTags(
-        selectedFilterTags.filter((selectedTag) => selectedTag !== tag)
+        selectedFilterTags.filter((selectedTag) => selectedTag.name !== tag.name)
       );
     } else {
       setSelectedFilterTags([...selectedFilterTags, tag]);
@@ -126,7 +128,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
               key={tag.id}
               onClick={() => handleFilterTagSelect(tag)}
               className={`cursor-pointer px-3 py-2 rounded-lg ${
-                selectedFilterTags.includes(tag)
+                selectedFilterTags.some(selectedTag => selectedTag.name === tag.name)
                   ? 'bg-blue-100 text-blue-800'
                   : 'bg-gray-200'
               }`}

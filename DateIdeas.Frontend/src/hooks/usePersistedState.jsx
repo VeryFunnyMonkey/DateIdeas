@@ -1,7 +1,7 @@
 // Can use this to persist state in local storage - useful for storing user preferences, etc.
-import React, { useEffect } from "react";
+import {useState, useEffect } from "react";
 export const usePersistedState = (key, defaultValue) => {
-    const [state, setState] = React.useState(
+    const [state, setState] = useState(
       () => JSON.parse(localStorage.getItem(key)) || defaultValue
     );
     useEffect(() => {
