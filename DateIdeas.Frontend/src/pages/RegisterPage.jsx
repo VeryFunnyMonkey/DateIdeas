@@ -30,7 +30,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-50">
+    <div className="flex items-center justify-center h-svh bg-slate-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         {errorMessages && (
           <div className="mb-4 bg-red-600 text-white px-4 py-2 rounded shadow-lg">

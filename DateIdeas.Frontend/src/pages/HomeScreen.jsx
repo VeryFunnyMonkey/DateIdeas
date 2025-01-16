@@ -69,7 +69,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   };
 
   return (
-    <div className="pb-16 pt-4 min-h-screen bg-slate-50">
+    <div className="pb-16 pt-4 h-svh bg-slate-50">
       {/* Search Bar */}
       <SearchBar setSearchTerm={setSearchTerm} />
 
