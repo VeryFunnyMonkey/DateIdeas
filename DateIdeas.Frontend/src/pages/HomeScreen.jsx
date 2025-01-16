@@ -1,31 +1,52 @@
 import { useState } from 'react';
 import TitleBar from '../components/TitleBar';
+import SearchBar from '../components/SearchBar';
+import FilterDropdown from '../components/FilterDropdown';
 import DateIdeaList from '../components/DateIdeaList';
 import DateIdeaModal from '../components/DateIdeaModal';
 import ScheduleDateIdeaModal from '../components/ScheduleDateIdeaModal';
 import { usePersistedState } from '../hooks/usePersistedState';
 import { addIdea, editIdea, deleteIdea, addNewTag } from '../services/dateIdeaService';
-import { Bars3BottomLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState(null);
-  const [selectedFilterTags, setSelectedFilterTags] = usePersistedState('selectedFilterTags',[]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedFilterTags, setSelectedFilterTags] = usePersistedState('selectedFilterTags', []);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = usePersistedState('selectedCategories', ['unscheduled', 'scheduled']);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredIdeas = selectedFilterTags.length
-    ? ideas.filter((idea) =>
-        selectedFilterTags.every((selectedTag) =>
-          idea.tags.some((ideaTag) => ideaTag.name === selectedTag.name)
-        )
-      )
-    : ideas;
+  // Filter Helpers
+  const filterBySearchTerm = (idea) => {
+    if (!searchTerm) return true;
+    return idea.title.toLowerCase().includes(searchTerm.toLowerCase());
+  };
 
-  const unscheduledIdeas = filteredIdeas.filter((idea) => !idea.scheduledDate && !idea.isCompleted);
-  const scheduledIdeas = filteredIdeas.filter((idea) => idea.scheduledDate && !idea.isCompleted);
-  const completedIdeas = filteredIdeas.filter((idea) => idea.isCompleted);
+  const filterByTags = (idea) => {
+    if (!selectedFilterTags.length) return true;
+    return selectedFilterTags.every((selectedTag) =>
+      idea.tags.some((ideaTag) => ideaTag.name === selectedTag.name)
+    );
+  };
+
+  const filterByCategory = (idea) => {
+    if (selectedCategories.includes('unscheduled') && !idea.scheduledDate && !idea.isCompleted) {
+      return true;
+    }
+    if (selectedCategories.includes('scheduled') && idea.scheduledDate && !idea.isCompleted) {
+      return true;
+    }
+    if (selectedCategories.includes('completed') && idea.isCompleted) {
+      return true;
+    }
+    return false;
+  };
+
+  // Combine Filters
+  const filteredIdeas = ideas.filter((idea) =>
+    filterByTags(idea) && filterBySearchTerm(idea) && filterByCategory(idea)
+  );
 
   const handleOpenModal = (idea = null) => {
     setSelectedIdea(idea);
@@ -47,119 +68,27 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
     setSelectedIdea(false);
   };
 
-  //TODO: Rework this, not a huge fan of the way this is implemented
-  const handleFilterTagSelect = (tag) => {
-    const tagExists = selectedFilterTags.some(selectedTag => selectedTag.name === tag.name);
-    if (tagExists) {
-      setSelectedFilterTags(
-        selectedFilterTags.filter((selectedTag) => selectedTag.name !== tag.name)
-      );
-    } else {
-      setSelectedFilterTags([...selectedFilterTags, tag]);
-    }
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleCategorySelect = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-
-  const displayedIdeas = [
-    ...selectedCategories.includes('unscheduled') ? unscheduledIdeas : [],
-    ...selectedCategories.includes('scheduled') ? scheduledIdeas : [],
-    ...selectedCategories.includes('completed') ? completedIdeas : [],
-  ];
-
   return (
-    <div className="relative pb-16">
-      {/* Title Bar */}
-      <TitleBar />
+    <div className="pb-16 pt-4 min-h-screen bg-slate-50">
+      {/* Search Bar */}
+      <SearchBar setSearchTerm={setSearchTerm} />
 
-      {/* Side Menu */}
-      <div
-        className={`fixed inset-0 z-50 transform ${
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out bg-white w-64 sm:w-80 md:w-96 lg:w-1/3 shadow-lg p-4`}
-      >
-        <button
-          onClick={toggleMenu}
-          className="absolute top-4 right-4 rounded-xl bg-gray-300 hover:bg-gray-400 text-xl font-bold flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18"
-        >
-          <XMarkIcon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 lg:h-9 lg:w-9" />
-        </button>
-        <h2 className="text-lg font-bold text-blue-500 mt-7 mb-2">Filter by Category</h2>
-        <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <button
-            onClick={() => handleCategorySelect('unscheduled')}
-            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
-              selectedCategories.includes('unscheduled') ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Unscheduled
-          </button>
-          <button
-            onClick={() => handleCategorySelect('scheduled')}
-            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
-              selectedCategories.includes('scheduled') ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Scheduled
-          </button>
-          <button
-            onClick={() => handleCategorySelect('completed')}
-            className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
-              selectedCategories.includes('completed') ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Completed
-          </button>
-        </div>
-        <h2 className="text-lg font-bold text-blue-500 mt-7 mb-2">Filter by Tags</h2>
-        <div className="flex gap-2 flex-wrap">
-          {tags.map((tag) => (
-            <span
-              key={tag.id}
-              onClick={() => handleFilterTagSelect(tag)}
-              className={`cursor-pointer px-3 py-2 rounded-lg ${
-                selectedFilterTags.some(selectedTag => selectedTag.name === tag.name)
-                  ? 'bg-blue-100 text-blue-800'
-                  : 'bg-gray-200'
-              }`}
-            >
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      </div>
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50"
-          onClick={toggleMenu}
-        ></div>
-      )}
+      {/* Dropdown Filter */}
+      <FilterDropdown
+        tags={tags}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        selectedFilterTags={selectedFilterTags}
+        setSelectedFilterTags={setSelectedFilterTags}
+      />
 
       {/* Ideas List */}
       <DateIdeaList
-        ideas={displayedIdeas}
+        ideas={filteredIdeas}
         onSchedule={(idea) => handleOpenSchedule(idea)}
         onEdit={(idea) => handleOpenModal(idea)}
         onDelete={deleteIdea}
       />
-
-      {/* Toggle Menu Button */}
-      <button
-        onClick={toggleMenu}
-        className="fixed top-4 left-4 bg-slate-100 text-black shadow-lg flex items-center justify-center rounded-3xl w-16 h-16 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 hover:bg-slate-200 transition duration-300 ease-in-out focus:bg-slate-200"
-      >
-        <Bars3BottomLeftIcon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 lg:h-9 lg:w-9" />
-      </button>
 
       {/* Add Idea Button */}
       <button
@@ -169,7 +98,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
         <PlusIcon className="h-10 w-10 sm:h-14 sm:w-14 md:h-18 md:w-18 lg:h-22 lg:w-22" />
       </button>
 
-      {/* Modal */}
+      {/* Modals */}
       <DateIdeaModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
