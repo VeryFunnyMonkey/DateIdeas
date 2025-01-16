@@ -12,7 +12,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+    <div className="flex flex-col items-center justify-center h-svh bg-slate-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-blue-600">Profile</h1>
@@ -23,13 +23,7 @@ export default function ProfilePage() {
             Logout
           </button>
         </div>
-        <div className="flex items-center mb-6">
-          <div className="w-24 h-24 rounded-full bg-blue-200 flex items-center justify-center text-2xl font-bold text-white">
-            {user?.email.charAt(0).toUpperCase()}
-          </div>
-          <div className="ml-6">
-            <h2 className="text-2xl font-bold text-gray-700">{user?.email}</h2>
-          </div>
+        <div className="flex items-center">
         </div>
         <div className="border-t border-gray-200 pt-6">
           <h3 className="text-xl font-bold text-gray-700 mb-4">Account Details</h3>
