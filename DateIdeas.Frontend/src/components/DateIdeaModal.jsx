@@ -89,6 +89,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
               id="title"
               name="title"
               value={formData.title ?? ''}
+              maxLength={25}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
@@ -139,7 +140,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
                 </button>
               ))}
             </div>
-          </div>
+          </div> 
           
           {/* New Tag Input */}
           <div className="mb-4 flex items-center gap-2">
@@ -147,6 +148,7 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
               type="text"
               placeholder="Add new tag"
               value={newTag}
+              maxLength={20}
               onChange={(e) => setNewTag(e.target.value)}
               className="flex-grow px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
