@@ -37,12 +37,12 @@ export default function FilterDropdown({ tags, selectedCategories, setSelectedCa
       {isDropdownOpen && (
         <div className="absolute top-full mt-2 bg-white shadow-lg rounded-lg p-4 w-full z-50">
           <h2 className="text-lg font-bold text-blue-500 mb-2">Filter by Category</h2>
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-col sm:flex-row gap-2 mb-4">
             {['unscheduled', 'scheduled', 'completed'].map((category) => (
               <button
                 key={category}
                 onClick={() => handleCategorySelect(category)}
-                className={`px-4 py-2 rounded-lg ${
+                className={`flex items-center justify-center w-full sm:w-1/3 px-4 py-2 rounded-lg text-center ${
                   selectedCategories.includes(category) ? 'bg-blue-500 text-white' : 'bg-gray-200'
                 }`}
               >
