@@ -4,14 +4,14 @@ import { ClockIcon, PencilIcon, TrashIcon, CheckCircleIcon, CalendarIcon } from 
 export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
   return (
     <div
-      className={`relative bg-slate-100 shadow-md rounded-lg p-4 border ${
+      className={`relative bg-gradient-to-r from-slate-50 to-slate-100 shadow-lg rounded-lg p-6 border ${
         idea.isCompleted
           ? 'border-green-400'
           : idea.scheduledDate
           ? 'border-blue-400'
-          : 'border-gray-200'
-      } hover:shadow-lg transition duration-200 ease-in-out ${
-        onEdit || onDelete ? 'pb-12' : 'pb-4'
+          : 'border-gray-300'
+      } hover:shadow-2xl transition-all duration-300 ease-in-out ${
+        onEdit || onDelete ? 'pb-14' : 'pb-6'
       }`}
     >
       {/* Scheduled Indicator in Top-Right Corner */}
@@ -29,19 +29,19 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
       )}
 
       {/* Title and Location */}
-      <div className={idea.isCompleted ? 'opacity-50' : ''}>
-        <h2 className="text-2xl font-bold text-blue-600 mb-1">{idea.title}</h2>
-        <h3 className="text-lg font-medium text-gray-700 mb-2">{idea.location}</h3>
+      <div className={idea.isCompleted ? 'opacity-60' : ''}>
+        <h2 className="text-3xl font-semibold text-blue-700 mb-2">{idea.title}</h2>
+        <h3 className="text-xl font-medium text-gray-700 mb-3">{idea.location}</h3>
         {idea.scheduledDate && (
-          <p className="text-gray-600 mb-2">
+          <p className="text-sm text-gray-600 mb-3">
             Scheduled: {new Date(idea.scheduledDate).toLocaleString()}
           </p>
         )}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-3 mb-4">
           {idea.tags.map((tag) => (
             <span
               key={tag.id}
-              className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-lg"
+              className="inline-block bg-blue-200 text-blue-800 text-xs font-medium px-3 py-1 rounded-full shadow-md"
             >
               {tag.name}
             </span>
@@ -50,11 +50,11 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
       </div>
 
       {/* Action Buttons */}
-      <div className="absolute bottom-4 left-4 flex space-x-2">
+      <div className="absolute bottom-4 left-4 flex space-x-3">
         {onDelete && (
           <button
             onClick={() => onDelete(idea.id)}
-            className="p-2 rounded-lg bg-red-100 hover:bg-red-200 transition duration-200 ease-in-out flex items-center justify-center"
+            className="p-3 rounded-lg bg-red-100 hover:bg-red-200 transition-all duration-300 ease-in-out flex items-center justify-center shadow-md hover:scale-105"
           >
             <TrashIcon className="h-5 w-5 text-red-600" />
           </button>
@@ -62,7 +62,7 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
         {onEdit && (
           <button
             onClick={() => onEdit(idea)}
-            className="p-2 rounded-lg bg-amber-100 hover:bg-amber-200 transition duration-200 ease-in-out flex items-center justify-center"
+            className="p-3 rounded-lg bg-amber-100 hover:bg-amber-200 transition-all duration-300 ease-in-out flex items-center justify-center shadow-md hover:scale-105"
           >
             <PencilIcon className="h-5 w-5 text-orange-600" />
           </button>
@@ -70,7 +70,7 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
         {onSchedule && (
           <button
             onClick={() => onSchedule(idea)}
-            className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition duration-200 ease-in-out flex items-center justify-center"
+            className="p-3 rounded-lg bg-blue-100 hover:bg-blue-200 transition-all duration-300 ease-in-out flex items-center justify-center shadow-md hover:scale-105"
           >
             <ClockIcon className="h-5 w-5 text-blue-600" />
           </button>
