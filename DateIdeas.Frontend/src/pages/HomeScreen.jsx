@@ -69,7 +69,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
   };
 
   return (
-    <div className="pb-16 pt-4 h-svh bg-slate-50">
+    <div className="pb-16 pt-4 bg-slate-50 h-svh overflow-y-auto">
       {/* Search Bar */}
       <SearchBar setSearchTerm={setSearchTerm} />
 
@@ -93,7 +93,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
       {/* Add Idea Button */}
       <button
         onClick={() => handleOpenModal()}
-        className="fixed bottom-20 right-4 bg-pink-200 text-pink-500 rounded-3xl w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center shadow-xl hover:bg-pink-300 transition duration-300 ease-in-out focus:bg-pink-300"
+        className="fixed bottom-20 right-4 bg-pink-200 text-pink-500 rounded-3xl w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center shadow-md hover:bg-pink-300 hover:scale-105 transition-all duration-300 ease-in-out focus:bg-pink-300"
       >
         <PlusIcon className="h-10 w-10 sm:h-14 sm:w-14 md:h-18 md:w-18 lg:h-22 lg:w-22" />
       </button>
