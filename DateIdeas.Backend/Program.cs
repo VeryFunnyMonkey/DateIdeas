@@ -1,3 +1,4 @@
+using DateIdeas.Backend.Services;
 using DateIdeasBackend.Data;
 using DateIdeasBackend.Hubs;
 using DateIdeasBackend.Services;
@@ -33,6 +34,19 @@ builder.Services.AddSignalR();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<DateIdeasContext>();
 builder.Services.AddHostedService<DateIdeaExpirationHandlerService>();
+
+// Add email service - get the email config settings from appsettings.json
+builder.Services.AddTransient<IEmailSender, EmailSender>(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var emailSettings = configuration.GetSection("EmailSettings");
+    return new EmailSender(
+        emailSettings["SmtpHost"],
+        int.Parse(emailSettings["SmtpPort"]),
+        emailSettings["SmtpUser"],
+        emailSettings["SmtpPass"]
+    );
+});
 
 // Configure SQLite
 builder.Services.AddDbContext<DateIdeasContext>(options =>

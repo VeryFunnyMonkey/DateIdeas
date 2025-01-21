@@ -4,14 +4,14 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-public class EmailService : IEmailService
+public class EmailSender : IEmailSender
 {
     private readonly string _smtpHost;
     private readonly int _smtpPort;
     private readonly string _smtpUser;
     private readonly string _smtpPass;
 
-    public EmailService(string smtpHost, int smtpPort, string smtpUser, string smtpPass)
+    public EmailSender(string smtpHost, int smtpPort, string smtpUser, string smtpPass)
     {
         _smtpHost = smtpHost;
         _smtpPort = smtpPort;
