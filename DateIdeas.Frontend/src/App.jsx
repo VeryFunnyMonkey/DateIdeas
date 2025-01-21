@@ -56,16 +56,19 @@ function App() {
           });
 
           connection.on('UpdateDateIdea', (updatedIdea) => {
+            console.log('Received idea update:', updatedIdea);
             setIdeas((prevIdeas) =>
               prevIdeas.map((idea) => (idea.id === updatedIdea.id ? updatedIdea : idea))
             );
           });
 
           connection.on('DeleteDateIdea', (id) => {
+            console.log('Received idea delete:', id);
             setIdeas((prevIdeas) => prevIdeas.filter((idea) => idea.id !== id));
           });
 
           connection.on('ReceiveTag', (newTag) => {
+            console.log('Received new tag:', newTag);
             setTags((prevTags) => {
               if (!prevTags.some(tag => tag.id === newTag.id)) {
                 return [...prevTags, newTag];
@@ -75,12 +78,14 @@ function App() {
           });
 
           connection.on('UpdateTag', (updatedTag) => {
+            console.log('Received tag update:', updatedTag);
             setTags((prevTags) =>
               prevTags.map((tag) => (tag.id === updatedTag.id ? updatedTag : tag))
             );
           });
 
           connection.on('DeleteTag', (id) => {
+            console.log('Received tag delete:', id);
             setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
           });
         })
@@ -104,7 +109,7 @@ function App() {
             }/>
           <Route path="/random" element={ 
             <ProtectedRoute>
-              <RandomPage ideas={ideas} /> 
+              <RandomPage ideas={ideas.filter((idea) => !idea.scheduledDate && !idea.isCompleted)} /> 
             </ProtectedRoute>
             }/>
           <Route path="/calendar" element={

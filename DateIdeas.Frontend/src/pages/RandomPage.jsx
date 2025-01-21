@@ -10,15 +10,13 @@ export default function RandomPage({ ideas }) {
   const [isBroken, setIsBroken] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState(null);
 
-  const unscheduledIdeas = ideas.filter((idea) => !idea.scheduledDate && !idea.isCompleted);
-
   const handleGiftClick = () => {
     if (!isSwaying && !isBroken) {
       setIsSwaying(true);
       setTimeout(() => {
         setIsSwaying(false);
         setIsBroken(true);
-        const randomIdea = unscheduledIdeas[Math.floor(Math.random() * ideas.length)];
+        const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
         setSelectedIdea(randomIdea);
       }, 1000);
     }
@@ -31,7 +29,7 @@ export default function RandomPage({ ideas }) {
 
   return (
     <div className="flex flex-col justify-center h-svh bg-slate-50">
-      {(unscheduledIdeas.length === 0) ? <NoDateIdeas /> :
+      {(ideas.length === 0) ? <NoDateIdeas /> :
       !isBroken ? (
         <div className="flex items-center justify-center">
           <GiftIcon
