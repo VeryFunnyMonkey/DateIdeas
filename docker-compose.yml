@@ -17,6 +17,11 @@ services:
     environment:
       - FRONTEND_URL=http://backend:3000  # Use the service name 'backend' in the URL
       - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} # Get the Google Maps API key from the environment
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - FROM_EMAIL=${FROM_EMAIL}
     networks:
       - app-network
     volumes:

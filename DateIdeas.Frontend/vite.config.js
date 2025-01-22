@@ -23,6 +23,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/AuthApi': {
+        target: 'http://localhost:5500',
+        changeOrigin: true,
+        secure: false,
+      },
     }
   }
 })

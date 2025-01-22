@@ -31,21 +31,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSignalR();
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<DateIdeasContext>();
 builder.Services.AddHostedService<DateIdeaExpirationHandlerService>();
+
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options => 
+{ 
+    options.User.RequireUniqueEmail = true; 
+    // options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = true; 
+})
+    .AddEntityFrameworkStores<DateIdeasContext>();
 
 // Add email service - get the email config settings from appsettings.json
 builder.Services.AddTransient<IEmailSender, EmailSender>(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var emailSettings = configuration.GetSection("EmailSettings");
-    return new EmailSender(
-        emailSettings["SmtpHost"],
-        int.Parse(emailSettings["SmtpPort"]),
-        emailSettings["SmtpUser"],
-        emailSettings["SmtpPass"]
-    );
+    var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST") ?? configuration["EmailSettings:SmtpHost"];
+    var smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? configuration["EmailSettings:SmtpPort"]);
+    var smtpUser = Environment.GetEnvironmentVariable("SMTP_USER") ?? configuration["EmailSettings:SmtpUser"];
+    var smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS") ?? configuration["EmailSettings:SmtpPass"];
+    var fromEmail = Environment.GetEnvironmentVariable("FROM_EMAIL") ?? configuration["EmailSettings:FromEmail"];
+    
+    return new EmailSender(smtpHost, smtpPort, smtpUser, smtpPass, fromEmail);
 });
 
 // Configure SQLite
@@ -69,7 +75,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGroup("/Auth").MapIdentityApi<ApplicationUser>();
+app.MapGroup("/AuthApi").MapIdentityApi<ApplicationUser>();
 
 app.UseRouting();
 

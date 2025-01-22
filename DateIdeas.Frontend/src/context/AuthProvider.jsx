@@ -4,6 +4,7 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 const API_BASE_URL = '/Auth';
+const API_BASE_URL_PREMADE = '/AuthApi';
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -11,7 +12,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/manage/info`, { withCredentials: true })
+      .get(`${API_BASE_URL_PREMADE}/manage/info`, { withCredentials: true })
       .then((response) => {
         setUser(response.data);
       })
@@ -30,8 +31,8 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    await axios.post(`${API_BASE_URL}/login?useCookies=true`, { email, password }, { withCredentials: true });
-    const response = await axios.get(`${API_BASE_URL}/Manage/Info`, { withCredentials: true });
+    await axios.post(`${API_BASE_URL_PREMADE}/login?useCookies=true`, { email, password }, { withCredentials: true });
+    const response = await axios.get(`${API_BASE_URL_PREMADE}/Manage/Info`, { withCredentials: true });
     setUser(response.data);
   };
 
