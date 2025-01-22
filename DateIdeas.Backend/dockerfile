@@ -22,6 +22,8 @@ COPY --from=build /app/out .
 # Default value; can be overridden in Docker run command
 ENV FRONTEND_URL=http://frontend:3000
 
+ENV REQUIRE_CONFIRM_EMAIL=true
+
 ARG GOOGLE_MAPS_API_KEY
 
 ARG SMTP_HOST
