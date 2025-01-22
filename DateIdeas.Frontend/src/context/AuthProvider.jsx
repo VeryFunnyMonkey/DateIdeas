@@ -37,7 +37,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, password) => {
-    await axios.post(`${API_BASE_URL}/register`, { email, password }, { withCredentials: true });
+    const response = await axios.post(`${API_BASE_URL}/register`, { email, password }, { withCredentials: true });
+    return response;
   };
 
   const logout = async () => {

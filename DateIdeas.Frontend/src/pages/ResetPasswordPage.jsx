@@ -1,39 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../hooks/useAuthContext';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function RegisterPage() {
-  const [email, setEmail] = useState('');
+export default function ResetPasswordPage() {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessages, setErrorMessages] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const { user, register, login } = useAuthContext();
+  const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  const query = new URLSearchParams(location.search);
+  const token = query.get('token');
+  const email = query.get('email');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await register(email, password);
-      if (response.data.emailConfirmationRequired) {
-        setSuccessMessage(response.data.message);
-        setEmail("");
-        setPassword("");
-      } else {
-        await login(email, password);
-        setSuccessMessage(response.data.message);
-        navigate('/');
-      }
+    if (password !== confirmPassword) {
+      setErrorMessages('Passwords do not match');
+      return;
+    }
 
+    try {
+      const response = await axios.post('/Auth/resetpassword', {
+        email,
+        token,
+        password,
+      });
+      setSuccessMessage(response.data);
+      setTimeout(() => navigate('/login'), 3000); // Redirect to login after 3 seconds
     } catch (error) {
       const extractedErrors = Object.values(error.response.data)
-        .flat()
-        .map((msg) => msg);
+      .flat()
+      .map((msg) => msg);
       setErrorMessages(extractedErrors || 'Registration failed.');
     }
   };
@@ -55,19 +54,8 @@ export default function RegisterPage() {
               {successMessage}
           </div>
         )}
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">Register</h1>
+        <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">Reset Password</h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 mb-2">Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-            />
-          </div>
           <div className="mb-6">
             <label htmlFor="password" className="block text-gray-700 mb-2">Password:</label>
             <input
@@ -79,16 +67,24 @@ export default function RegisterPage() {
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
+          <div className="mb-6">
+            <label htmlFor="confirmPassword" className="block text-gray-700 mb-2">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
           >
-            Register
+            Reset Password
           </button>
         </form>
-        <p className="text-center text-gray-600 mt-4">
-          Already have an account? <a href="/login" className="text-blue-500 hover:underline">Login</a>
-        </p>
       </div>
     </div>
   );

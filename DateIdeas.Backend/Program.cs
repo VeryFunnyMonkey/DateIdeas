@@ -3,11 +3,12 @@ using DateIdeasBackend.Data;
 using DateIdeasBackend.Hubs;
 using DateIdeasBackend.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Get the frontend URL from environment variables or use a default
-var frontendUrl = builder.Configuration["FRONTEND_URL"] ?? "http://frontend:3000";
+var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL")?? builder.Configuration["FRONTEND_URL"] ?? "http://frontend:3000";
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -37,9 +38,17 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 { 
     options.User.RequireUniqueEmail = true; 
     // options.Password.RequireNonAlphanumeric = false;
-    options.SignIn.RequireConfirmedEmail = true; 
+
+    var requireConfirmedEmail = Environment.GetEnvironmentVariable("REQUIRE_CONFIRM_EMAIL") ?? builder.Configuration["IdentitySettings:RequireConfirmEmail"] ?? "true";
+    options.SignIn.RequireConfirmedEmail = bool.Parse(requireConfirmedEmail); 
 })
-    .AddEntityFrameworkStores<DateIdeasContext>();
+    .AddEntityFrameworkStores<DateIdeasContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(3);
+});
 
 // Add email service - get the email config settings from appsettings.json
 builder.Services.AddTransient<IEmailSender, EmailSender>(serviceProvider =>

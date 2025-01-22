@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"  # Expose Nginx on port 80
     environment:
-      - BACKEND_URL=http://backend:5000  # Use the service name 'backend' in the URL
+      - BACKEND_URL=${BACKEND_URL}  # Use the service name 'backend' in the URL
     networks:
       - app-network
 
@@ -15,7 +15,7 @@ services:
     ports:
       - "5500:5000"  # Ensure the backend is accessible on port 5000
     environment:
-      - FRONTEND_URL=http://backend:3000  # Use the service name 'backend' in the URL
+      - FRONTEND_URL=${FRONTEND_URL}  # Use the service name 'backend' in the URL
       - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} # Get the Google Maps API key from the environment
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
