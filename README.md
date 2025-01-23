@@ -3,7 +3,8 @@
 Date Ideas is a web application designed to help you create, organise, and select random date ideas. The application includes features such as date location autocomplete using Google Maps API, and real-time updates using SignalR.
 
 <p align="center">
-  <img width="320" alt="UI Screenshot" src="https://github.com/user-attachments/assets/3b9e84dc-51b8-46cc-b96e-4cad52164c97"> 
+  <img width="320" alt="UI Screenshot" src="https://github.com/user-attachments/assets/67e635c3-d3e5-4e29-900a-ff4e971cee1c"> 
+
 </p>
 
 ## Table of Contents
