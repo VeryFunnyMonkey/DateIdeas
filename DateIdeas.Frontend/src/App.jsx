@@ -15,6 +15,7 @@ import { useAuthContext } from './hooks/useAuthContext';
 import CalendarPage from './pages/CalendarPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import ConfirmEmailPage from './pages/ConfirmEmailPage';
 
 function App() {
   const [ideas, setIdeas] = useState([]);
@@ -104,6 +105,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
           <Route path="/resetpassword" element={<ResetPasswordPage />} />
+          <Route path="/confirmemail" element={<ConfirmEmailPage />} />
           <Route
             path="/"
             element={ 

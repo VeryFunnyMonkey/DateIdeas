@@ -47,7 +47,8 @@ namespace DateIdeas.Backend.Controllers
                 if (emailConfirmationRequired)
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Auth", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
+                    // var callbackUrl = Url.Action(nameof(ConfirmEmail), "Auth", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = $"{frontendUrl}/confirmemail?userId={Uri.EscapeDataString(user.Id)}&code={Uri.EscapeDataString(code)}";
 
                     var email = new Email
                     {
