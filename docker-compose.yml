@@ -8,6 +8,7 @@ services:
       - BACKEND_URL=${BACKEND_URL}  # Use the service name 'backend' in the URL
     networks:
       - app-network
+    restart: unless-stopped
 
   backend:
     container_name: dateIdeas.Backend
@@ -29,6 +30,7 @@ services:
       # - /Users/joseph/Documents/dateIdeas.Backend:/data # Mac
       # - C:\Users\Joseph\Documents\dateIdeas.Backend:/data # Windows
       - /home/debian/docker/config/dateideas.backend:/data # Linux
+    restart: unless-stopped
 
 networks:
   app-network:
