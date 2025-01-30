@@ -39,6 +39,7 @@ export const deleteIdea = async (id, setIdeas) => {
 
 export const addNewTag = async (newTag, tags, setTags) => {
     if (!tags.includes(newTag)) {
-      newTag = await api.createTag({ name: newTag });
+      const addedTag = await api.createTag({ name: newTag });
+      return addedTag;
     }
   };

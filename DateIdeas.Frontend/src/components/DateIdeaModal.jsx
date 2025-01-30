@@ -58,10 +58,14 @@ export default function DateIdeaModal({ isOpen, onClose, onSubmit, initialData =
     }));
   };
 
-  const handleNewTagSubmit = () => {
+  const handleNewTagSubmit = async () => {
     if (newTag.trim() && !globalTags.some(tag => tag.name === newTag)) {
       const newTagTrimmed = newTag.trim();
-      addNewTag(newTagTrimmed);
+      const addedTag  = await addNewTag(newTagTrimmed);
+      setFormData((prevData) => ({
+        ...prevData,
+        tags: [...prevData.tags, addedTag]
+      }));
       setNewTag('');
     }
   };
