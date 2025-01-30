@@ -37,9 +37,18 @@ export const deleteIdea = async (id, setIdeas) => {
   await api.deleteDateIdea(id);
 };
 
+export const getTags = async (tags) => {
+  tags = await api.getTags();
+  return tags;
+};
+
 export const addNewTag = async (newTag, tags, setTags) => {
     if (!tags.includes(newTag)) {
       const addedTag = await api.createTag({ name: newTag });
       return addedTag;
     }
+  };
+
+  export const deleteTag = async (id) => {
+    await api.deleteTag(id);
   };

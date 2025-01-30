@@ -6,7 +6,7 @@ import DateIdeaList from '../components/DateIdeaList';
 import DateIdeaModal from '../components/DateIdeaModal';
 import ScheduleDateIdeaModal from '../components/ScheduleDateIdeaModal';
 import { usePersistedState } from '../hooks/usePersistedState';
-import { addIdea, editIdea, deleteIdea, addNewTag } from '../services/dateIdeaService';
+import { addIdea, editIdea, deleteIdea, addNewTag, deleteTag } from '../services/dateIdeaService';
 import { PlusIcon } from '@heroicons/react/24/solid';
 
 export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
@@ -80,6 +80,7 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
         setSelectedCategories={setSelectedCategories}
         selectedFilterTags={selectedFilterTags}
         setSelectedFilterTags={setSelectedFilterTags}
+        deleteTag={deleteTag}
       />
 
       {/* Ideas List */}

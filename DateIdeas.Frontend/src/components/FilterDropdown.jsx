@@ -1,20 +1,33 @@
 import { useState } from 'react';
-import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { ChevronDownIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/solid';
 
-export default function FilterDropdown({ tags, selectedCategories, setSelectedCategories, selectedFilterTags, setSelectedFilterTags }) {
+export default function FilterDropdown({ tags, selectedCategories, setSelectedCategories, selectedFilterTags, setSelectedFilterTags, deleteTag }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [tagsToDelete, setTagsToDelete] = useState([]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  
-  const handleFilterTagSelect = (tag) => {
-    const tagExists = selectedFilterTags.some((selectedTag) => selectedTag.name === tag.name);
-    if (tagExists) {
-      setSelectedFilterTags(selectedFilterTags.filter((selectedTag) => selectedTag.name !== tag.name));
-    } else {
-      setSelectedFilterTags([...selectedFilterTags, tag]);
+  const handleDeleteTagSelect = (tag) => {
+    if (isDeleteMode) {
+      console.log(isDeleteMode);
+      const tagExists = tagsToDelete.some((selectedTag) => selectedTag.name === tag.name);
+      if (tagExists) {
+        setTagsToDelete(tagsToDelete.filter((selectedTag) => selectedTag.name !== tag.name));
+      } else {
+        setTagsToDelete([...tagsToDelete, tag]);
+      }
     }
+  };
+
+  const handleFilterTagSelect = (tag) => {
+      const tagExists = selectedFilterTags.some((selectedTag) => selectedTag.name === tag.name);
+      if (tagExists) {
+        setSelectedFilterTags(selectedFilterTags.filter((selectedTag) => selectedTag.name !== tag.name));
+      } else {
+        setSelectedFilterTags([...selectedFilterTags, tag]);
+      }
   };
 
   const handleCategorySelect = (category) => {
@@ -23,6 +36,19 @@ export default function FilterDropdown({ tags, selectedCategories, setSelectedCa
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
+  };
+
+  const toggleDeleteMode = () => {
+    if (isDeleteMode && tagsToDelete.length > 0) {
+      console.log("tags", tags);
+      setSelectedFilterTags(selectedFilterTags.filter(tag => !tagsToDelete.includes(tag.name)));
+      tagsToDelete.forEach((tag) => {
+        console.log(tag);
+        deleteTag(tag.id);
+      });
+      setTagsToDelete([]);
+    }
+    setIsDeleteMode(!isDeleteMode);
   };
 
   return (
@@ -50,14 +76,21 @@ export default function FilterDropdown({ tags, selectedCategories, setSelectedCa
               </button>
             ))}
           </div>
-          <h2 className="text-lg font-bold text-blue-500 mb-2">Filter by Tags</h2>
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-lg font-bold text-blue-500">Filter by Tags</h2>
+            <button onClick={toggleDeleteMode} className={"text-white px-2 py-2 rounded-full bg-red-500"}>
+              {isDeleteMode ? <CheckIcon className="h-5 w-5" /> : <TrashIcon className="h-5 w-5" />}
+            </button>
+          </div>
           <div className="flex gap-2 flex-wrap">
             {tags.map((tag) => (
               <span
                 key={tag.id}
-                onClick={() => handleFilterTagSelect(tag)}
+                onClick={() => (isDeleteMode ? handleDeleteTagSelect(tag) : handleFilterTagSelect(tag))}
                 className={`cursor-pointer px-3 py-2 rounded-lg ${
-                  selectedFilterTags.some((selectedTag) => selectedTag.name === tag.name)
+                  tagsToDelete.includes(tag)
+                    ? 'bg-red-200 text-red-800'
+                    : selectedFilterTags.some((selectedTag) => selectedTag.name === tag.name)
                     ? 'bg-blue-100 text-blue-800'
                     : 'bg-gray-200'
                 }`}
