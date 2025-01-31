@@ -45,6 +45,7 @@ export default function FilterDropdown({ tags, selectedCategories, setSelectedCa
       tagsToDelete.forEach((tag) => {
         console.log(tag);
         deleteTag(tag.id);
+        setSelectedFilterTags(selectedFilterTags.filter((selectedTag) => selectedTag.name !== tag.name));
       });
       setTagsToDelete([]);
     }

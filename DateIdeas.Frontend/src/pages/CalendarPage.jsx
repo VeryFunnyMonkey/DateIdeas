@@ -11,7 +11,7 @@ export default function CalendarPage({ ideas }) {
     .sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate));
 
   return (
-    <div className="p-4 max-w-screen-md mx-auto pb-20">
+    <div className="pb-16 pt-4 bg-slate-50 h-svh overflow-y-auto">
       <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Upcoming Dates</h1>
 
       {upComingDateIdeas.length > 0 ? (
