@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClockIcon, PencilIcon, TrashIcon, CheckCircleIcon, CalendarIcon } from '@heroicons/react/24/solid';
+import { ClockIcon, PencilIcon, TrashIcon, CheckCircleIcon, CalendarIcon, LightBulbIcon } from '@heroicons/react/24/solid';
 
 export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
   return (
@@ -8,16 +8,23 @@ export default function DateIdeaCard({ idea, onSchedule, onEdit, onDelete }) {
         idea.isCompleted
           ? 'border-green-400'
           : idea.scheduledDate
-          ? 'border-blue-400'
-          : 'border-gray-300'
+          ? 'border-orange-400'
+          : 'border-blue-400'
       } hover:shadow-2xl transition-all duration-300 ease-in-out ${
         onEdit || onDelete ? 'pb-14' : 'pb-6'
       }`}
     >
       {/* Scheduled Indicator in Top-Right Corner */}
+      {!idea.scheduledDate && !idea.isCompleted && (
+        <div className="absolute top-2 right-2">
+          <LightBulbIcon className="h-8 w-8 text-blue-500" />
+        </div>
+      )}
+
+      {/* Scheduled Indicator in Top-Right Corner */}
       {idea.scheduledDate && !idea.isCompleted && (
         <div className="absolute top-2 right-2">
-          <CalendarIcon className="h-8 w-8 text-blue-500" />
+          <CalendarIcon className="h-8 w-8 text-orange-500" />
         </div>
       )}
 
