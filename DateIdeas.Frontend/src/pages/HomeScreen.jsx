@@ -94,11 +94,13 @@ export default function HomeScreen({ ideas, tags, setIdeas, setTags }) {
       {/* Add Idea Button */}
       <button
         onClick={() => handleOpenModal()}
-        className="fixed bottom-20 right-4 bg-pink-200 text-pink-500 rounded-3xl w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center shadow-md hover:bg-pink-300 hover:scale-105 transition-all duration-300 ease-in-out focus:bg-pink-300"
-      >
-        <PlusIcon className="h-10 w-10 sm:h-14 sm:w-14 md:h-18 md:w-18 lg:h-22 lg:w-22" />
+        className="fixed bottom-20 right-6 sm:bottom-8 sm:right-8 flex items-center justify-center 
+        w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-pink-300 to-pink-600 
+        text-white shadow-lg z-50 transform active:scale-75 transition-transform duration-300"
+        >
+          <PlusIcon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12" />
       </button>
-
+      
       {/* Modals */}
       <DateIdeaModal
         isOpen={isModalOpen}

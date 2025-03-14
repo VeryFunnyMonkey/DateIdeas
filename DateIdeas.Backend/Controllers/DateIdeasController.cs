@@ -57,6 +57,7 @@ namespace DateIdeasBackend.Controllers
         public async Task<ActionResult<CreateDateIdeaDto>> PostDateIdea(CreateDateIdeaDto createDateIdeaDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine(userId);
             var dateIdea = _mapper.Map<DateIdea>(createDateIdeaDto);
             dateIdea.UserId = userId;
 

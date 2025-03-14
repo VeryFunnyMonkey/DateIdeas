@@ -6,7 +6,6 @@ import BottomNavigationBar from './components/BottomNavigationBar';
 import HomeScreen from './pages/HomeScreen';
 import RandomPage from './pages/RandomPage';
 import ProfilePage from './pages/ProfilePage';
-import AuthProvider from './context/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';

@@ -12,14 +12,15 @@ export default function CalendarPage({ ideas }) {
 
   return (
     <div className="pb-16 pt-4 bg-slate-50 h-svh overflow-y-auto">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Upcoming Dates</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-700">Upcoming Dates</h1>
 
       {upComingDateIdeas.length > 0 ? (
         <ul className="space-y-6">
           {upComingDateIdeas.map((idea, index) => (
             <li
               key={index}
-              className="p-6 border rounded-lg shadow-lg bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between transition-transform transform hover:scale-105"
+              className="p-6 border rounded-lg shadow-lg bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between 
+              transition-transform transform hover:scale-105 max-w-md mx-auto"
             >
               <div className="flex-1">
                 <div className="text-xl font-semibold text-blue-600">{idea.title}</div>
